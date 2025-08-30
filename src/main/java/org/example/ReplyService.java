@@ -1,6 +1,5 @@
 package org.example;
 import java.util.Map;
-import java.util.Enumeration;
 import java.util.Arrays;
 import java.util.ArrayList;
 
@@ -68,6 +67,29 @@ public class ReplyService {
         // - null or blank -> "Please say something."
         // - For known messages, return exact string for each ReplyType.
         // - For unknown messages, return the 'any other text' mapping.
+
+        int ReplyIndex;
+        if (type == ReplyType.FORMAL) {
+            ReplyIndex = 0;
+        }
+        else if (type == ReplyType.FRIENDLY) {
+            ReplyIndex = 1;
+        }
+        else {
+            ReplyIndex = 2;
+        }
+
+        if (message == null) {
+            return replyControl.get("").get(ReplyIndex);
+        }
+
+        String lowercaseMessage = message.toLowerCase();
+        String lowercaseMessageStrip = lowercaseMessage.strip().replaceAll("\\s+", " ");
+//        String lowercaseMessageStripClean = lowercaseMessageStrip.replaceAll("\\{Punct}+$", "");
+
+        if (lowercaseMessageStrip.isEmpty()) {
+            return replyControl.get(lowercaseMessageStrip).get(ReplyIndex);
+        }
         return "Please say something.";
 //        throw new UnsupportedOperationException("Not implemented yet");
     }
