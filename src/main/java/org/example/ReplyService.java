@@ -16,28 +16,28 @@ public class ReplyService {
 
             Map.entry("hello", new ArrayList<>(Arrays.asList(
                     "Hello. How may I assist you today?",
-                    "Hi! 👋 What's up?",
+                    "Hi! 👋 What’s up?",
                     "Hello. How can I help?"))),
 
             Map.entry("how are you", new ArrayList<>(Arrays.asList(
                     "I am functioning properly. How may I assist you?",
-                    "Doing great! 😄 How I can help?",
-                    "I'm good. How I can help?"))),
+                    "Doing great! 😄 How can I help?",
+                    "I’m good. How can I help?"))),
 
             Map.entry("i need help", new ArrayList<>(Arrays.asList(
                     "I can assist with that. Please provide more details.",
-                    "I've got you! 🙂 Tell me a bit more.",
-                    "Share details; I'll help."))),
+                    "I’ve got you! 🙂 Tell me a bit more.",
+                    "Share details; I’ll help."))),
 
             Map.entry("can you help me with my account", new ArrayList<>(Arrays.asList(
                     "Certainly. Please describe the account issue.",
-                    "Sure thing! 😊 What's wrong with the account?",
-                    "Describe the account issue..."))),
+                    "Sure thing! 😊 What’s wrong with the account?",
+                    "Describe the account issue…"))),
 
             Map.entry("thanks", new ArrayList<>(Arrays.asList(
                     "You are welcome.",
                     "Anytime! 🙌",
-                    "You're welcome."))),
+                    "You’re welcome."))),
 
             Map.entry("bye", new ArrayList<>(Arrays.asList(
                     "Goodbye.",
@@ -46,13 +46,8 @@ public class ReplyService {
 
             Map.entry("what is your name", new ArrayList<>(Arrays.asList(
                     "I am your virtual assistant.",
-                    "I'm your helper bot 🤖",
-                    "I'm your assistant."))),
-
-            Map.entry("other", new ArrayList<>(Arrays.asList(
-                    "Could you clarify your request?",
-                    "Could you tell me more?",
-                    "Please clarify."))),
+                    "I’m your helper bot 🤖",
+                    "I’m your assistant."))),
 
             Map.entry("", new ArrayList<>(Arrays.asList(
                     "Please say something.",
@@ -68,29 +63,34 @@ public class ReplyService {
         // - For known messages, return exact string for each ReplyType.
         // - For unknown messages, return the 'any other text' mapping.
 
-        int ReplyIndex;
+//        Enum mapping to index
+        int replyIndex;
         if (type == ReplyType.FORMAL) {
-            ReplyIndex = 0;
+            replyIndex = 0;
         }
         else if (type == ReplyType.FRIENDLY) {
-            ReplyIndex = 1;
+            replyIndex = 1;
         }
         else {
-            ReplyIndex = 2;
+            replyIndex = 2;
         }
 
+//        Null message case
         if (message == null) {
-            return replyControl.get("").get(ReplyIndex);
+            return replyControl.get("").get(replyIndex);
         }
 
-        String lowercaseMessage = message.toLowerCase();
-        String lowercaseMessageStrip = lowercaseMessage.strip().replaceAll("\\s+", " ");
-//        String lowercaseMessageStripClean = lowercaseMessageStrip.replaceAll("\\{Punct}+$", "");
+//        Message cleaning
+        String lowerMessage = message.toLowerCase();
+        String lowerMessageStrip = lowerMessage.strip().replaceAll("\\s+", " ");
+        String lowerMessageStripClean = lowerMessageStrip.replaceAll("\\{Punct}+$", "");
 
-        if (lowercaseMessageStrip.isEmpty()) {
-            return replyControl.get(lowercaseMessageStrip).get(ReplyIndex);
-        }
-        return "Please say something.";
-//        throw new UnsupportedOperationException("Not implemented yet");
+//        Default Response
+        ArrayList<String> defaultResponses = new ArrayList<>(Arrays.asList(
+                        "Could you clarify your request?",
+                        "Could you tell me more?",
+                        "Please clarify."));
+
+        return replyControl.getOrDefault(lowerMessageStripClean, defaultResponses).get(replyIndex);
     }
 }
